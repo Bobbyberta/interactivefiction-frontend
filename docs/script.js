@@ -15,15 +15,18 @@ const sendButton = document.querySelector('button');
 // Initial DM message
 fetch(`${API_URL}/api/story`, {
     method: 'POST',
+    credentials: 'include',  // Include cookies if needed
     headers: {
         'Content-Type': 'application/json',
-        'Origin': window.location.origin
+        'Authorization': 'Bearer null'  // Add if you need auth later
     },
     body: JSON.stringify({input: 'start game'})
 })
 .then(response => {
     console.log('Response status:', response.status);
+    console.log('Response headers:', response.headers);
     if (!response.ok) {
+        console.log('Response body:', response.text());
         throw new Error(`HTTP error! status: ${response.status}`);
     }
     return response.json();
@@ -36,6 +39,8 @@ fetch(`${API_URL}/api/story`, {
 .catch(error => {
     console.error('Detailed error:', error);
     console.error('Stack trace:', error.stack);
+    console.error('API URL used:', API_URL);
+    console.error('Current origin:', window.location.origin);
     let errorMessage = "Connection error. ";
     if (error.message.includes('Failed to fetch')) {
         errorMessage += "Cannot reach the server. ";
@@ -64,8 +69,10 @@ function sendMessage() {
     // Send to backend
     fetch(`${API_URL}/api/story`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': 'Bearer null'
         },
         body: JSON.stringify({input: input})
     })
