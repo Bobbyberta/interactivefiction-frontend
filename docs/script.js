@@ -16,13 +16,16 @@ const sendButton = document.querySelector('button');
 fetch(`${API_URL}/api/story`, {
     method: 'POST',
     headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
     },
     body: JSON.stringify({input: 'start game'})
 })
 .then(response => {
     console.log('Response status:', response.status);
     console.log('Response headers:', response.headers);
+    // Log the raw response for debugging
+    response.clone().text().then(text => console.log('Raw response:', text));
     if (!response.ok) {
         console.log('Response body:', response.text());
         throw new Error(`HTTP error! status: ${response.status}`);
