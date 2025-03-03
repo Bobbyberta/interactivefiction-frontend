@@ -6,6 +6,7 @@ const API_URL = window.location.hostname === 'localhost'
 
 // Add debug logging
 console.log('Using API URL:', API_URL);
+console.log('Running in:', window.location.hostname === 'localhost' ? 'local' : 'production');
 
 const storyContainer = document.getElementById('story-container');
 const playerInput = document.getElementById('player-input');
@@ -16,6 +17,7 @@ fetch(`${API_URL}/api/story`, {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
+        'Origin': window.location.origin
     },
     body: JSON.stringify({input: 'start game'})
 })
@@ -34,7 +36,16 @@ fetch(`${API_URL}/api/story`, {
 .catch(error => {
     console.error('Detailed error:', error);
     console.error('Stack trace:', error.stack);
-    addMessage("Connection error. Please try again later.", 'dm');
+    let errorMessage = "Connection error. ";
+    if (error.message.includes('Failed to fetch')) {
+        errorMessage += "Cannot reach the server. ";
+        if (window.location.hostname === 'localhost') {
+            errorMessage += "Make sure the backend is running locally.";
+        } else {
+            errorMessage += "The server might be starting up, please try again in a minute.";
+        }
+    }
+    addMessage(errorMessage, 'dm');
 });
 
 function sendMessage() {
