@@ -3,6 +3,10 @@
 const API_URL = window.location.hostname === 'localhost' 
     ? 'http://localhost:5001'
     : 'https://interactivefiction-sl2f.onrender.com';  // Make sure this matches your actual Render URL
+
+// Add debug logging
+console.log('Using API URL:', API_URL);
+
 const storyContainer = document.getElementById('story-container');
 const playerInput = document.getElementById('player-input');
 const sendButton = document.querySelector('button');
@@ -15,13 +19,21 @@ fetch(`${API_URL}/api/story`, {
     },
     body: JSON.stringify({input: 'start game'})
 })
-.then(response => response.json())
+.then(response => {
+    console.log('Response status:', response.status);
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+})
 .then(data => {
+    console.log('Response data:', data);
     updateStory(data.history);
     addMessage(data.response, 'dm');
 })
 .catch(error => {
-    console.error('Error:', error);
+    console.error('Detailed error:', error);
+    console.error('Stack trace:', error.stack);
     addMessage("Connection error. Please try again later.", 'dm');
 });
 
