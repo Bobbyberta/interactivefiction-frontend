@@ -1,5 +1,8 @@
 // Update this URL to your Render deployment URL when available
-const API_URL = 'https://your-render-app.onrender.com';
+// For local development
+const API_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:5001'
+    : 'https://interactivefiction-sl2f.onrender.com';  // Make sure this matches your actual Render URL
 const storyContainer = document.getElementById('story-container');
 const playerInput = document.getElementById('player-input');
 const sendButton = document.querySelector('button');
