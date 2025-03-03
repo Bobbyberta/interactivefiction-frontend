@@ -15,10 +15,8 @@ const sendButton = document.querySelector('button');
 // Initial DM message
 fetch(`${API_URL}/api/story`, {
     method: 'POST',
-    credentials: 'include',  // Include cookies if needed
     headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer null'  // Add if you need auth later
+        'Content-Type': 'application/json'
     },
     body: JSON.stringify({input: 'start game'})
 })
@@ -69,10 +67,8 @@ function sendMessage() {
     // Send to backend
     fetch(`${API_URL}/api/story`, {
         method: 'POST',
-        credentials: 'include',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer null'
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({input: input})
     })
